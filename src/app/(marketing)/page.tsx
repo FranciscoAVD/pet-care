@@ -1,3 +1,4 @@
+import Logo from "@/components/logo";
 import Image from "next/image";
 export default function Home() {
   return (
@@ -9,11 +10,18 @@ export default function Home() {
         alt=""
       />
       <div>
+        <Logo />
         <h1 className="text-5xl text-main  my-6 max-w-[500px]">
-          Manage your <span className="font-bold">pet daycare</span> with
-          ease
+          Manage your <span className="font-bold">pet daycare</span> with ease
         </h1>
-        <p className="text-2xl text-[#e5e8ec] font-medium max-w-[600px]">Use PetCare to easily keep track of pets under your care. Get lifetime access for $299</p>
+        <p className="text-2xl text-[#e5e8ec] font-medium max-w-[600px]">
+          Use PetCare to easily keep track of pets under your care. Get lifetime
+          access for $299
+        </p>
+      </div>
+      <div className="mt-10">
+        <button></button>
+        <button></button>
       </div>
     </main>
   );
