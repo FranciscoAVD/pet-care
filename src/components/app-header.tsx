@@ -17,7 +17,7 @@ const routes = [
 export default function AppHeader() {
   const currentPath = usePathname();
   return (
-    <header className="flex items-center justify-between mx-auto border-b border-white/30 pt-4 pb-2">
+    <header className="flex items-center justify-between mx-auto w-full border-b border-white/30 pt-4 pb-2">
       <Logo />
 
       <nav>
