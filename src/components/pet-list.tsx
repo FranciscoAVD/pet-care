@@ -6,12 +6,16 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 export default function PetList({ pets }: { pets: TPet[] }) {
-  return (
+  const setPets = usePetStore((state) => state.setPets);
+  setPets(pets);
+  return pets.length > 0 ? (
     <ul className="bg-white border-b border-black/10">
       {pets.map((p) => (
         <Li key={p.id} imgSrc={p.imageUrl} petName={p.name} petId={p.id} />
       ))}
     </ul>
+  ) : (
+    <NoPets />
   );
 }
 
@@ -32,7 +36,8 @@ function Li({
         className={cn(
           "flex items-center h-[70px] w-full cursor-pointer px-5 text-base gap-x-3 hover:bg-[#eff1f2] focus:bg-[#eff1f2] transition",
           {
-            "bg-accent/90 hover:bg-accent/90 focus:bg-accent/90 text-white": petId === active,
+            "bg-accent/90 hover:bg-accent/90 focus:bg-accent/90 text-white":
+              petId === active,
           }
         )}
         onClick={() => setPet(petId)}
@@ -47,5 +52,13 @@ function Li({
         <p className="font-semibold">{petName}</p>
       </button>
     </li>
+  );
+}
+
+function NoPets() {
+  return (
+    <div className="h-full w-full flex items-center justify-center">
+      <span className="text-lg ">Currently, no pets</span>
+    </div>
   );
 }
