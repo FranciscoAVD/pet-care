@@ -1,6 +1,7 @@
 import Logo from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 export default function Home() {
   return (
     <main className="min-h-screen bg-main flex flex-col lg:flex-row items-center justify-center gap-x-10">
@@ -22,8 +23,12 @@ export default function Home() {
           access for $299.
         </p>
         <div className="mt-10 space-x-4">
-          <Button>Get Started</Button>
-          <Button variant="secondary">Log in</Button>
+          <Button asChild>
+            <Link href="/sign-up">Get Started</Link>
+          </Button>
+          <Button variant="secondary" asChild>
+            <Link href="/sign-in">Log in</Link>
+          </Button>
         </div>
       </div>
     </main>
