@@ -2,13 +2,13 @@ import { TPet } from "@/lib/types";
 import { create } from "zustand";
 
 type TPetStore = {
-    activePet: number | null;
+    activePet: string;
     pets: TPet[];
-    setActivePet: (id: number) => void;
+    setActivePet: (id: string) => void;
     setPets: (pet: TPet) => void;
 }
 export const usePetStore = create<TPetStore>((set,get) =>({
-    activePet: null,
+    activePet: '-1',
     pets: [],
     setActivePet: (id) => set(()=>({activePet: id})),
     setPets: (pet) => {
