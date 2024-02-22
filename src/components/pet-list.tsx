@@ -1,23 +1,42 @@
+"use client";
+
 import { TPet } from "@/lib/types";
+import { usePetStore } from "@/stores/pet-store";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
-const placeholder = "https://bytegrad.com/course-assets/react-nextjs/pet-placeholder.png";
-
-export default function PetList({pets}:{pets: TPet[]}) {
+export default function PetList({ pets }: { pets: TPet[] }) {
   return (
     <ul className="bg-white border-b border-black/10">
-      {pets.map(p => <Li key={p.id} imgSrc={p.imageUrl} petName={p.name}/>)}
+      {pets.map((p) => (
+        <Li key={p.id} imgSrc={p.imageUrl} petName={p.name} petId={p.id} />
+      ))}
     </ul>
   );
 }
 
-function Li({imgSrc, petName}:{
-    imgSrc: string,
-    petName: string
+function Li({
+  imgSrc,
+  petName,
+  petId,
+}: {
+  imgSrc: string;
+  petName: string;
+  petId: string;
 }) {
+  const active = usePetStore((state) => state.activePet);
+  const setPet = usePetStore((state) => state.setActivePet);
   return (
     <li>
-      <button className="flex items-center h-[70px] w-full cursor-pointer px-5 text-base gap-x-3 hover:bg-[#eff1f2] focus:bg-[#eff1f2] transition">
+      <button
+        className={cn(
+          "flex items-center h-[70px] w-full cursor-pointer px-5 text-base gap-x-3 hover:bg-[#eff1f2] focus:bg-[#eff1f2] transition",
+          {
+            "bg-accent/90 hover:bg-accent/90 focus:bg-accent/90 text-white": petId === active,
+          }
+        )}
+        onClick={() => setPet(petId)}
+      >
         <Image
           src={imgSrc}
           alt="pet image"
