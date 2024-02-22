@@ -6,11 +6,12 @@ import SearchForm from "@/components/search-form";
 import Stats from "@/components/stats";
 import { TPet } from "@/lib/types";
 
+
 export default async function Dashboard() {
   const res = await fetch("https://bytegrad.com/course-assets/projects/petsoft/api/pets");
   if (!res.ok) throw new Error('Could not fetch pets')
   const pets: TPet[] = await res.json();
-  console.log(pets)
+  
   return (
     <main>
       <div className="flex justify-between items-center py-8">
