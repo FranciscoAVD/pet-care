@@ -1,4 +1,13 @@
-export default function Dashboard(){
+import Branding from "@/components/branding";
+import Stats from "@/components/stats";
 
-    return <main>Dashboard</main>
+export default function Dashboard() {
+  return (
+    <main>
+      <div className="flex justify-between items-center py-8">
+        <Branding />
+        <Stats />
+      </div>
+    </main>
+  );
 }
