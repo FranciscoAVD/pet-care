@@ -28,7 +28,7 @@ function Li({
   petId: string;
 }) {
   const active = usePetStore((state) => state.activePet);
-  const setPet = usePetStore((state) => state.setActivePet);
+  const setPet = usePetStore((state) => state.setActivePetId);
   return (
     <li>
       <button
