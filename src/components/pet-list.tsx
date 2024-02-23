@@ -2,14 +2,16 @@
 
 import { TPet } from "@/lib/types";
 import { usePetStore } from "@/stores/pet-store";
+import { useSearchStore } from "@/stores/search-store";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 export default function PetList({ pets }: { pets: TPet[] }) {
-  
+  const filtered = useSearchStore(state=> state.filterSearch)
+  const search = useSearchStore(state=> state.search)
   return pets.length > 0 ? (
     <ul className="bg-white border-b border-black/10">
-      {pets.map((p) => (
+      {filtered(pets, search).map((p) => (
         <Li key={p.id} imgSrc={p.imageUrl} petName={p.name} petId={p.id} />
       ))}
     </ul>
