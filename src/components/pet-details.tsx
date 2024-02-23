@@ -44,18 +44,18 @@ function NoPet() {
 
 function TopBar({ url, name }: { url: string; name: string }) {
   return (
-    <section className="flex items-center justify-between px-8 py-5 bg-white border-b border-black/10">
-      <div className="flex items-center">
+    <section className="space-y-4 sm:space-y-0 sm:flex sm:items-center sm:justify-between px-8 py-5 bg-white border-b border-black/10">
+      <div className="sm:flex sm:items-center text-center">
         <Image
           src={url}
           alt="Pet Image"
           width={75}
           height={75}
-          className="w-[75px] h-[75px] rounded-full object-cover"
+          className="mx-auto sm:mx-0 w-[75px] h-[75px] rounded-full object-cover"
         />
-        <h2 className="text-3xl font-semibold leading-7 ml-5">{name}</h2>
+        <h2 className="text-3xl font-semibold leading-7 sm:ml-5">{name}</h2>
       </div>
-      <div className="space-x-2">
+      <div className="space-x-2 mx-auto sm:mx-0 w-fit">
         <Button>Edit</Button>
         <Button variant="secondary" className="hover:text-accent">
           Checkout

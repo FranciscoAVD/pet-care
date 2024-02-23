@@ -6,7 +6,7 @@ export default function Branding() {
       <H1>
         Pet<span className="font-semibold text-accent">Care</span>
       </H1>
-      <p className="opacity-50">Manage your pet daycare with ease</p>
+      <p className="opacity-50 w-[200px] sm:w-fit text-balance">Manage your pet daycare with ease</p>
     </section>
   );
 }
