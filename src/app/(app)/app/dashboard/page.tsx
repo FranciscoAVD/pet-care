@@ -18,7 +18,7 @@ export default async function Dashboard() {
     <main>
       <div className="flex justify-between items-center py-8">
         <Branding />
-        <Stats />
+        <Stats guests={pets.length}/>
       </div>
       <div className="grid md:grid-cols-3 grid-rows-[45px_300px_500px] md:grid-rows-[45px_1fr] md:h-[600px] gap-4">
         <div className="md:row-start-1 md:row-span-1 md:col-start-1 md:col-span-1">
