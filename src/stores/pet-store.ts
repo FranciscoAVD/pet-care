@@ -12,11 +12,9 @@ export const usePetStore = create<TPetStore>((set,get) =>({
     pets: [],
     setActivePetId: (id) => {
         set(()=>({activePet: id}))
-        console.log(get().activePet, "from setter")
     },
     getActivePet: (pets: TPet[], id) => {
-        console.log(get().activePet, "from filter")
-        const active = pets.filter(p => p.id === id);
-        return active.length === 1 ? active[0] : null;
+        const active = pets.find(p => p.id === id);
+        return active ? active : null;
     }
 }))
