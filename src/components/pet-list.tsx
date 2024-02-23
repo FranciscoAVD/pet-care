@@ -6,8 +6,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 export default function PetList({ pets }: { pets: TPet[] }) {
-  const setPets = usePetStore((state) => state.setPets);
-  setPets(pets);
+  
   return pets.length > 0 ? (
     <ul className="bg-white border-b border-black/10">
       {pets.map((p) => (
