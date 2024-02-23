@@ -28,7 +28,7 @@ export default async function Dashboard() {
           <PetList pets={pets} />
         </ContentBlock>
         <ContentBlock className="md:row-start-1 md:row-span-full md:col-start-2 md:col-span-full">
-          <PetDetails />
+          <PetDetails pets={pets}/>
         </ContentBlock>
       </div>
     </main>
