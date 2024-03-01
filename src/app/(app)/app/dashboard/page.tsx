@@ -1,3 +1,4 @@
+import AddPetButton from "@/components/add-pet-button";
 import Branding from "@/components/branding";
 import ContentBlock from "@/components/content-block";
 import PetDetails from "@/components/pet-details";
@@ -5,6 +6,7 @@ import PetList from "@/components/pet-list";
 import SearchForm from "@/components/search-form";
 import Stats from "@/components/stats";
 import { TPet } from "@/lib/types";
+
 
 export default async function Dashboard() {
   let pets: TPet[] = [];
@@ -18,17 +20,18 @@ export default async function Dashboard() {
     <main>
       <div className="flex justify-between sm:items-center py-8">
         <Branding />
-        <Stats guests={pets.length}/>
+        <Stats guests={pets.length} />
       </div>
       <div className="grid md:grid-cols-3 grid-rows-[45px_300px_500px] md:grid-rows-[45px_1fr] md:h-[600px] gap-4">
         <div className="md:row-start-1 md:row-span-1 md:col-start-1 md:col-span-1">
           <SearchForm />
         </div>
-        <ContentBlock className="md:row-start-2 md:row-span-full md:col-start-1 md:col-span-1">
+        <ContentBlock className="relative md:row-start-2 md:row-span-full md:col-start-1 md:col-span-1">
           <PetList pets={pets} />
+          <AddPetButton className="absolute right-4 bottom-4 z-10"/>
         </ContentBlock>
         <ContentBlock className="md:row-start-1 md:row-span-full md:col-start-2 md:col-span-full">
-          <PetDetails pets={pets}/>
+          <PetDetails pets={pets} />
         </ContentBlock>
       </div>
     </main>

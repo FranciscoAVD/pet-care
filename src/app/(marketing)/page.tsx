@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 export default function Home() {
+  
   return (
     <main className="min-h-screen bg-main flex flex-col lg:flex-row items-center justify-center gap-x-10">
       <Image
