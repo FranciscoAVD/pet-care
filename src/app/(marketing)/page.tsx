@@ -2,8 +2,9 @@ import Logo from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import { auth } from "@clerk/nextjs";
 export default function Home() {
-  
+  const { userId } = auth();
   return (
     <main className="min-h-screen bg-main flex flex-col lg:flex-row items-center justify-center gap-x-10">
       <Image
@@ -28,7 +29,7 @@ export default function Home() {
             <Link href="/sign-up">Get Started</Link>
           </Button>
           <Button variant="secondary" asChild>
-            <Link href="/sign-in">Log in</Link>
+            <Link href={userId ? "app/dashboard" : "/sign-in"}>Log in</Link>
           </Button>
         </div>
       </div>
