@@ -55,7 +55,7 @@ function TopBar({ url, name }: { url: string; name: string }) {
         />
         <h2 className="text-3xl font-semibold leading-7 sm:ml-5">{name}</h2>
       </div>
-      <div className="space-x-2 mx-auto sm:mx-0 w-fit">
+      <div className="space-x-2 text-center">
         <Button>Edit</Button>
         <Button variant="secondary" className="hover:text-accent">
           Checkout
@@ -67,9 +67,9 @@ function TopBar({ url, name }: { url: string; name: string }) {
 
 function OtherInfo({ owner, age }: { owner: string; age: number }) {
   return (
-    <section className="flex justify-between px-8 py-10 text-center">
+    <section className="flex justify-between px-8 py-10">
       <div>
-        <h3 className="text-[13px] font-medium uppercase text-gray-700 ">
+        <h3 className="text-[13px] text-left font-medium uppercase text-gray-700">
           owner name
         </h3>
         <p className="mt-1 text-lg text-gray-700 ">{owner}</p>
@@ -78,7 +78,7 @@ function OtherInfo({ owner, age }: { owner: string; age: number }) {
         <h3 className="text-[13px] font-medium uppercase text-gray-700 ">
           age
         </h3>
-        <p className="mt-1 text-lg text-gray-700 ">{age}</p>
+        <p className="mt-1 text-lg text-gray-700 text-center">{age}</p>
       </div>
     </section>
   );
