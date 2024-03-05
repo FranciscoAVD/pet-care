@@ -1,5 +1,6 @@
 import { mutation } from "./_generated/server";
 
-export const generateUploadUrl = mutation(async (ctx) => {
-  return await ctx.storage.generateUploadUrl();
+export const generateUploadUrl = mutation({
+    handler: async (ctx) => await ctx.storage.generateUploadUrl()
 });
+
