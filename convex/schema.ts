@@ -12,6 +12,6 @@ export default defineSchema({
     age: v.number(),
     owner: v.string(),
     notes: v.optional(v.string()),
-    // profileImage: v.optional()
+    imageStorageId: v.optional(v.id("_storage"))
   }).index('by_careTaker', ['careTaker'])
 });
