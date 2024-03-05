@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
@@ -16,10 +16,44 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import ImageButton from "./add-image-btn";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { useUserStore } from "@/stores/user-store";
 
 export default function AddPetButton({ className }: { className?: string }) {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [owner, setOwner] = useState("");
+  const [name, setName] = useState("");
+  const [age, setAge] = useState(1);
+  const [notes, setNotes] = useState("");
+  const add = useMutation(api.pets.addPet);
+  const currentUser = useUserStore((state) => state.currentUserId);
+  const handleSubmit = async () => {
+    if (!currentUser) return;
+    const pet = {
+      name: name,
+      owner: owner,
+      age: age,
+      notes: notes,
+      user: currentUser,
+    };
+    const id = await add(pet);
+    //will use id for success banner
+  };
+  const resetInputs = () => {
+    setName("");
+    setOwner("");
+    setAge(1);
+    setNotes("");
+  };
+  const disabled = () => {
+    if (owner && name && age && age >= 1 && age <= 32) {
+      return false;
+    }
+    return true;
+  };
   return (
-    <Dialog>
+    <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
       <DialogTrigger asChild>
         <Button
           className={cn(
@@ -33,38 +67,74 @@ export default function AddPetButton({ className }: { className?: string }) {
         <DialogHeader>
           <DialogTitle>Add Guest</DialogTitle>
           <DialogDescription>
-            Add new Guests to your dashboard. Click add when you're done.
+            Add new Guests to your dashboard. Be sure to fill out all fields not
+            labeled as <span className="font-bold">optional</span>. Click add
+            when you're done.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="flex flex-col gap-4">
             <Label htmlFor="name">Guest name</Label>
-            <Input id="name" placeholder="Spyke" spellCheck={false} />
+            <Input
+              id="name"
+              placeholder="Spyke"
+              spellCheck={false}
+              value={name ? name : ""}
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
           <div className="flex flex-col gap-4">
             <Label htmlFor="owner">Owner Name</Label>
-            <Input id="owner" placeholder="John Doe" />
+            <Input
+              id="owner"
+              placeholder="John Doe"
+              value={owner ? owner : ""}
+              onChange={(e) => setOwner(e.target.value)}
+            />
           </div>
           <div className="flex flex-col gap-4">
-            <Label htmlFor="age">Age</Label>
-            <Input id="age" placeholder="3" type="number" min="0" max="32" />
+            <Label htmlFor="age">
+              Age <span className="font-normal opacity-70">(years)</span>
+            </Label>
+            <Input
+              id="age"
+              type="number"
+              min="1"
+              max="32"
+              value={age ? age : 0}
+              onChange={(e) => {
+                if (e.target.valueAsNumber) {
+                  if (e.target.valueAsNumber < 0 || e.target.valueAsNumber > 32)
+                    return;
+                  setAge(e.target.valueAsNumber);
+                } else setAge(0);
+              }}
+              inputMode="numeric"
+            />
           </div>
           <div className="flex flex-col gap-4">
             <Label htmlFor="notes">
               Notes <span className="font-normal opacity-70">(optional)</span>
             </Label>
-            <Textarea placeholder="Likes cat food. Slobbers a lot when he lays down." />
+            <Textarea
+              placeholder="Likes cat food. Slobbers a lot when he lays down."
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
           </div>
-
-          <Label>
-            Guest Image{" "}
-            <span className="font-normal opacity-70">(optional)</span>
-          </Label>
-          <ImageButton />
         </div>
-
         <DialogFooter>
-          <Button type="submit">Add</Button>
+          <Button
+            type="submit"
+            disabled={disabled()}
+            onClick={() => {
+              handleSubmit();
+              resetInputs();
+              setIsFormOpen(false);
+            }}
+          >
+            Add
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
