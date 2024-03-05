@@ -1,0 +1,25 @@
+import { v } from "convex/values";
+import { mutation } from "./_generated/server";
+
+export const addPet = mutation({
+    // You can customize these as you like
+    args: {
+      storageId: v.optional(v.id("_storage")),
+      name: v.string(),
+      owner: v.string(),
+      age: v.number(),
+      notes: v.optional(v.string()),
+      user: v.id("users")
+    },
+    handler: async (ctx, args) => {
+      const res = await ctx.db.insert("pets", {
+        imageStorageId: args.storageId,
+        owner: args.owner,
+        age: args.age,
+        notes: args.notes,
+        name: args.name,
+        careTaker: args.user
+      });
+      return res
+    },
+  });
