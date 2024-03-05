@@ -53,7 +53,7 @@ export default function AddPetButton({ className }: { className?: string }) {
             <Label htmlFor="notes">
               Notes <span className="font-normal opacity-70">(optional)</span>
             </Label>
-            <Textarea placeholder="Likes cat food. Slobers a lot when he lays down." />
+            <Textarea placeholder="Likes cat food. Slobbers a lot when he lays down." />
           </div>
 
           <Label>
