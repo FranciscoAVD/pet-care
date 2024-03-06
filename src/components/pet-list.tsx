@@ -1,18 +1,33 @@
 "use client";
 
-import { TPet } from "@/lib/types";
 import { usePetStore } from "@/stores/pet-store";
 import { useSearchStore } from "@/stores/search-store";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { useUserStore } from "@/stores/user-store";
+import { placeholderUrl } from "@/lib/constants";
 
-export default function PetList({ pets }: { pets: TPet[] }) {
+export default function PetList() {
+
+  const currUser = useUserStore(state=>state.currentUserId)
+  const pets = useQuery(api.pets.getPets, { user: currUser });
+
+  const setNum = usePetStore((state) => state.setNumberOfGuests);
   const filtered = useSearchStore((state) => state.filterSearch);
   const search = useSearchStore((state) => state.search);
-  return pets.length > 0 ? (
+
+  console.log(pets)
+  return pets && pets.length > 0 ? (
     <ul className="bg-white border-b border-black/10">
       {filtered(pets, search).map((p) => (
-        <Li key={p.id} imgSrc={p.imageUrl} petName={p.name} petId={p.id} />
+        <Li
+          key={p._id}
+          imgSrc={p.imageStorageId ? p.imageStorageId : placeholderUrl}
+          petName={p.name}
+          petId={p._id}
+        />
       ))}
     </ul>
   ) : (
