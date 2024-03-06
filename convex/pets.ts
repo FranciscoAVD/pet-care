@@ -2,7 +2,6 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
 export const addPet = mutation({
-  // You can customize these as you like
   args: {
     storageId: v.optional(v.id("_storage")),
     name: v.string(),
