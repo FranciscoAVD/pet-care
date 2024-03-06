@@ -25,13 +25,17 @@ export const addPet = mutation({
 });
 export const getPets = query({
   args: {
-    user: v.id("users"),
+    user: v.union(v.id("users"), v.null()),
   },
   handler: async (ctx, args) => {
-    const res = await ctx.db
-      .query("pets")
-      .withIndex("by_careTaker", (q) => q.eq("careTaker", args.user))
-      .collect();
-    return res;
+    if (args.user !== null) {
+      const res = await ctx.db
+        .query("pets")
+        //@ts-ignore
+        .withIndex("by_careTaker", (q) => q.eq("careTaker", args.user))
+        .collect();
+      return res;
+    }
+    return [];
   },
 });
