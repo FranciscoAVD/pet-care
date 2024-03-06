@@ -18,26 +18,26 @@ import { Textarea } from "./ui/textarea";
 import ImageButton from "./add-image-btn";
 import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { useUserStore } from "@/stores/user-store";
+import { Id } from "../../convex/_generated/dataModel";
 
-export default function AddPetButton({ className }: { className?: string }) {
+export default function AddPetButton({ className, id }: { className?: string, id: Id<"users">|null }) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [owner, setOwner] = useState("");
   const [name, setName] = useState("");
   const [age, setAge] = useState(1);
   const [notes, setNotes] = useState("");
   const add = useMutation(api.pets.addPet);
-  const currentUser = useUserStore((state) => state.currentUserId);
+
   const handleSubmit = async () => {
-    if (!currentUser) return;
+    if(!id) return;
     const pet = {
       name: name,
       owner: owner,
       age: age,
       notes: notes,
-      user: currentUser,
+      user: id,
     };
-    const id = await add(pet);
+    const success = await add(pet);
     //will use id for success banner
   };
   const resetInputs = () => {
@@ -72,7 +72,12 @@ export default function AddPetButton({ className }: { className?: string }) {
             when you're done.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <form className="grid gap-4 py-4" onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+              resetInputs();
+              setIsFormOpen(false);
+            }}>
           <div className="flex flex-col gap-4">
             <Label htmlFor="name">Guest name</Label>
             <Input
@@ -122,20 +127,17 @@ export default function AddPetButton({ className }: { className?: string }) {
               onChange={(e) => setNotes(e.target.value)}
             />
           </div>
-        </div>
-        <DialogFooter>
           <Button
             type="submit"
+            className="w-fit ml-auto"
             disabled={disabled()}
-            onClick={() => {
-              handleSubmit();
-              resetInputs();
-              setIsFormOpen(false);
-            }}
           >
             Add
           </Button>
-        </DialogFooter>
+        </form>
+        
+          
+        
       </DialogContent>
     </Dialog>
   );
