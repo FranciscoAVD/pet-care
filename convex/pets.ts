@@ -33,8 +33,17 @@ export const getPets = query({
         //@ts-ignore
         .withIndex("by_careTaker", (q) => q.eq("careTaker", args.user))
         .collect();
-      return res;
+      return res ? res : undefined;
     }
-    return [];
+    return null;
   },
 });
+
+export const removePet = mutation({
+  args: {
+    id: v.id("pets"),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.delete(args.id)
+  },
+})
