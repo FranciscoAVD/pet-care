@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { placeholderUrl } from "@/lib/constants";
 import { TPet } from "@/lib/types";
 
-export default function PetList({ pets }: { pets: TPet[] }) {
+export default function PetList({ pets }: { pets: TPet[] | null | undefined }) {
   return pets && pets.length > 0 ? (
     <ul className="bg-white border-b border-black/10">
       {pets.map((p) => (
@@ -18,9 +18,7 @@ export default function PetList({ pets }: { pets: TPet[] }) {
         />
       ))}
     </ul>
-  ) : (
-    <NoPets />
-  );
+  ) : <LoadingPets />
 }
 
 function Li({
@@ -59,6 +57,13 @@ function Li({
   );
 }
 
+function LoadingPets() {
+  return (
+    <div className="h-full w-full flex items-center justify-center">
+      <div className="h-10 w-10 border-4 border-t-main animate-spin rounded-full" />
+    </div>
+  );
+}
 function NoPets() {
   return (
     <div className="h-full w-full flex items-center justify-center">
