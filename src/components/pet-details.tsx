@@ -2,21 +2,21 @@
 
 import { TPet } from "@/lib/types";
 import Image from "next/image";
-import { usePetStore } from "@/stores/pet-store";
 import { Button } from "./ui/button";
 import { placeholderUrl } from "@/lib/constants";
 
-export default function PetDetails({ pets }: { pets: TPet[] }) {
-  const getPet = usePetStore((state) => state.getActivePet);
-  const id = usePetStore((state) => state.activePet);
-  const pet = getPet(pets, id);
+export default function PetDetails({pet}:{pet: TPet | null}) {
+  
   return (
     <section className="flex flex-col h-full w-full">
       {pet ? (
         <>
-          <TopBar url={pet.imageUrl} name={pet.name} />
-          <OtherInfo owner={pet.ownerName} age={pet.age} />
-          <Notes notes={pet.notes} />
+          <TopBar
+            url={pet.imageStorageId ? pet.imageStorageId : placeholderUrl}
+            name={pet.name}
+          />
+          <OtherInfo owner={pet.owner} age={pet.age} />
+          <Notes notes={pet.notes ? pet.notes : ""} />
         </>
       ) : (
         <NoPet />
@@ -28,16 +28,14 @@ export default function PetDetails({ pets }: { pets: TPet[] }) {
 function NoPet() {
   return (
     <section className="flex items-center px-8 py-5 bg-white border-b border-black/10">
-        <Image
-          src={placeholderUrl}
-          alt="Pet Image"
-          width={75}
-          height={75}
-          className="w-[75px] h-[75px] rounded-full object-cover"
-        />
-        <h2 className="text-3xl font-semibold leading-7 ml-5">
-          No Pet Selected
-        </h2>      
+      <Image
+        src={placeholderUrl}
+        alt="Pet Image"
+        width={75}
+        height={75}
+        className="w-[75px] h-[75px] rounded-full object-cover"
+      />
+      <h2 className="text-3xl font-semibold leading-7 ml-5">No Pet Selected</h2>
     </section>
   );
 }
