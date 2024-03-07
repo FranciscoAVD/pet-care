@@ -5,7 +5,7 @@ type TPetStore = {
   activePet: string;
   pets: TPet[];
   setActivePetId: (id: string) => void;
-  getActivePet: (pets: TPet[] | undefined, id: string) => TPet | null;
+  getActivePet: (pets: TPet[] | null | undefined, id: string) => TPet | null;
 };
 export const usePetStore = create<TPetStore>((set) => ({
   activePet: "-1",
