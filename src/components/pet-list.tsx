@@ -8,7 +8,11 @@ import { TPet } from "@/lib/types";
 
 export default function PetList({ pets }: { pets: TPet[] | null | undefined }) {
   return pets && pets.length > 0 ? (
-    <ul className="bg-white border-b border-black/10">
+    <ul
+      className={cn("h-full border-b border-black/10", {
+        "overflow-y-scroll overscroll-contain": pets.length > 4,
+      })}
+    >
       {pets.map((p) => (
         <Li
           key={p._id}
@@ -18,7 +22,11 @@ export default function PetList({ pets }: { pets: TPet[] | null | undefined }) {
         />
       ))}
     </ul>
-  ) : <LoadingPets />
+  ) : pets === null ? (
+    <LoadingPets />
+  ) : (
+    <NoPets />
+  );
 }
 
 function Li({
@@ -36,7 +44,7 @@ function Li({
     <li>
       <button
         className={cn(
-          "flex items-center h-[70px] w-full cursor-pointer px-5 text-base gap-x-3 hover:bg-[#eff1f2] focus:bg-[#eff1f2] transition",
+          "flex items-center h-[70px] w-full cursor-pointer px-5 text-base gap-x-3 bg-white hover:bg-[#eff1f2] focus:bg-[#eff1f2] transition",
           {
             "bg-accent/90 hover:bg-accent/90 focus:bg-accent/90 text-white":
               petId === active,
