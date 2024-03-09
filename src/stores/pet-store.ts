@@ -1,14 +1,15 @@
 import { TPet } from "@/lib/types";
 import { create } from "zustand";
+import { Id } from "../../convex/_generated/dataModel";
 
 type TPetStore = {
-  activePet: string;
+  activePet: Id<"pets"> | string;
   pets: TPet[];
-  setActivePetId: (id: string) => void;
+  setActivePetId: (id: Id<"pets">) => void;
   getActivePet: (pets: TPet[] | null | undefined, id: string) => TPet | null;
 };
 export const usePetStore = create<TPetStore>((set) => ({
-  activePet: "-1",
+  activePet: "",
   pets: [],
   setActivePetId: (id) => {
     set(() => ({ activePet: id }));
