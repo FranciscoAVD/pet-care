@@ -5,6 +5,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { placeholderUrl } from "@/lib/constants";
 import { TPet } from "@/lib/types";
+import { Id } from "../../convex/_generated/dataModel";
 
 export default function PetList({ pets }: { pets: TPet[] | null | undefined }) {
   return pets && pets.length > 0 ? (
@@ -16,7 +17,7 @@ export default function PetList({ pets }: { pets: TPet[] | null | undefined }) {
       {pets.map((p) => (
         <Li
           key={p._id}
-          imgSrc={p.imageStorageId ? p.imageStorageId : placeholderUrl}
+          imgSrc={p.imageUrl ? p.imageUrl : placeholderUrl}
           petName={p.name}
           petId={p._id}
         />
@@ -36,7 +37,7 @@ function Li({
 }: {
   imgSrc: string;
   petName: string;
-  petId: string;
+  petId: Id<"pets">;
 }) {
   const active = usePetStore((state) => state.activePet);
   const setPet = usePetStore((state) => state.setActivePetId);
