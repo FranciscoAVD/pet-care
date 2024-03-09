@@ -5,6 +5,7 @@ export type TPet = {
     _creationTime: number;
     notes?: string | undefined;
     imageStorageId?: Id<"_storage"> | undefined;
+    imageUrl?: string | undefined;
     careTaker: Id<"users">;
     name: string;
     age: number;
