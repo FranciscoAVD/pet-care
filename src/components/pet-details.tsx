@@ -8,16 +8,25 @@ import ImageButton from "./add-image-btn";
 import { api } from "../../convex/_generated/api";
 import { useMutation } from "convex/react";
 import { usePetStore } from "@/stores/pet-store";
+import { Textarea } from "./ui/textarea";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { useState } from "react";
 
 export default function PetDetails({ pet }: { pet: TPet | null }) {
   return (
     <section className="flex flex-col h-full w-full">
       {pet ? (
         <>
-          <TopBar
-            url={pet.imageUrl ? pet.imageUrl : placeholderUrl}
-            name={pet.name}
-          />
+          <TopBar pet={pet} />
           <OtherInfo owner={pet.owner} age={pet.age} />
           <Notes notes={pet.notes ? pet.notes : ""} />
         </>
@@ -43,9 +52,10 @@ function NoPet() {
   );
 }
 
-function TopBar({ url, name }: { url: string; name: string }) {
-  const remove = useMutation(api.pets.removePet)
-  const activePet = usePetStore(state => state.activePet)
+function TopBar({ pet }: { pet: TPet }) {
+  const remove = useMutation(api.pets.removePet);
+  const activePet = usePetStore((state) => state.activePet);
+  const url = pet.imageUrl ? pet.imageUrl : placeholderUrl;
   return (
     <section className="space-y-4 sm:space-y-0 sm:flex sm:items-center sm:justify-between px-8 py-5 bg-white border-b border-black/10">
       <div className="sm:flex sm:items-center text-center">
@@ -59,20 +69,24 @@ function TopBar({ url, name }: { url: string; name: string }) {
           />
           {url === placeholderUrl && (
             <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-black/50 hover:text-accent transition">
-                <ImageButton />              
+              <ImageButton />
             </div>
           )}
         </div>
 
-        <h2 className="text-3xl font-semibold leading-7 sm:ml-5">{name}</h2>
+        <h2 className="text-3xl font-semibold leading-7 sm:ml-5">{pet.name}</h2>
       </div>
       <div className="space-x-2 text-center">
-        <Button>Edit</Button>
-        <Button variant="secondary" className="hover:text-accent" onClick={()=>{
-          //activePet will always be of type Id<"pets"> when button is visible
-          //@ts-ignore
-          remove({id: activePet})
-        }}>
+        <EditPet pet={pet} />
+        <Button
+          variant="secondary"
+          className="hover:text-accent"
+          onClick={() => {
+            //activePet will always be of type Id<"pets"> when button is visible
+            //@ts-ignore
+            remove({ id: activePet });
+          }}
+        >
           Checkout
         </Button>
       </div>
@@ -104,5 +118,92 @@ function Notes({ notes }: { notes: string }) {
     <section className="grow bg-white px-7 py-5 rounded-md mb-9 mx-8 border border-black/10">
       {notes}
     </section>
+  );
+}
+
+function EditPet({ pet }: { pet: TPet }) {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [owner, setOwner] = useState(pet.owner);
+  const [name, setName] = useState(pet.name);
+  const [age, setAge] = useState(pet.age);
+  const [notes, setNotes] = useState(pet.notes?pet.notes:"");
+  const edit = useMutation(api.pets.editPet);
+  return (
+    <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+      <DialogTrigger asChild>
+        <Button>Edit</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Edit Guest Details</DialogTitle>
+          <DialogDescription>
+            Edit your guest's details. Edit any field and click save when you're
+            done to persist the changes.
+          </DialogDescription>
+        </DialogHeader>
+        <form className="grid gap-4 py-4" onSubmit={(e)=>{
+          e.preventDefault();
+          edit({
+            id: pet._id,
+            name: name,
+            age: age,
+            notes: notes,
+            owner: owner
+          })
+          setIsFormOpen(false);
+        }}>
+          <div className="flex flex-col gap-4">
+            <Label htmlFor="edit-name">Guest name</Label>
+            <Input
+              id="edit-name"
+              placeholder="Spyke"
+              spellCheck={false}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-4">
+            <Label htmlFor="edit-owner">Owner Name</Label>
+            <Input
+              id="edit-owner"
+              placeholder="John Doe"
+              value={owner}
+              onChange={(e) => setOwner(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-4">
+            <Label htmlFor="edit-age">
+              Age <span className="font-normal opacity-70">(years)</span>
+            </Label>
+            <Input
+              id="edit-age"
+              value={age ? age : 0}
+              onChange={(e) => {
+                if (e.target.valueAsNumber) {
+                  if (e.target.valueAsNumber < 0 || e.target.valueAsNumber > 32)
+                    return;
+                  setAge(e.target.valueAsNumber);
+                } else setAge(0);
+              }}
+              inputMode="numeric"
+            />
+          </div>
+          <div className="flex flex-col gap-4">
+            <Label htmlFor="edit-notes">
+              Notes <span className="font-normal opacity-70">(optional)</span>
+            </Label>
+            <Textarea
+              id="edit-notes"
+              placeholder="Likes cat food. Slobbers a lot when he lays down."
+              value={notes ? notes : ""}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </div>
+          <Button type="submit" className="w-fit ml-auto">
+            Save Changes
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
