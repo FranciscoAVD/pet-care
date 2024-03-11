@@ -6,16 +6,16 @@ import { auth } from "@clerk/nextjs";
 export default function Home() {
   const { userId } = auth();
   return (
-    <main className="min-h-screen bg-main flex flex-col lg:flex-row items-center justify-center gap-x-10">
+    <main className="min-h-screen bg-main px-10 flex gap-y-4 flex-col lg:flex-row items-center justify-center gap-x-10">
       <Image
         src="https://bytegrad.com/course-assets/react-nextjs/petsoft-preview.png"
         width={519}
         height={472}
         alt=""
       />
-      <div>
+      <div className="text-center">
         <Logo />
-        <h1 className="text-5xl text-gray-100 my-6 max-w-[500px]">
+        <h1 className="text-5xl text-gray-100 mb-6 mt-4 max-w-[500px]">
           Manage your{" "}
           <span className="font-bold text-[#019587]">pet daycare</span> with
           ease
@@ -24,7 +24,7 @@ export default function Home() {
           Use PetCare to easily keep track of pets under your care. Get lifetime
           access for $299.
         </p>
-        <div className="mt-10 space-x-4">
+        <div className="mt-10 flex justify-center space-x-4">
           <Button asChild>
             <Link href="/sign-up">Get Started</Link>
           </Button>

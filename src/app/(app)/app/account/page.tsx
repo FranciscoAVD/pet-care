@@ -12,6 +12,7 @@ export default function Account() {
       <div className="flex justify-between items-center">
         <H1 className="my-8">Your Account</H1>
         <div className="flex gap-x-2 items-center">
+          <span className="sr-only">User settings</span>
           <UserButton />
         </div>
       </div>
