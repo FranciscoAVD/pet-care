@@ -11,6 +11,7 @@ export default function PetList({ pets }: { pets: TPet[] | null | undefined }) {
   return pets && pets.length > 0 ? (
     <ul
       className={cn("h-full border-b border-black/10", {
+        //for mobile devices
         "overflow-y-scroll overscroll-contain": pets.length > 4,
       })}
     >
@@ -76,7 +77,7 @@ function LoadingPets() {
 function NoPets() {
   return (
     <div className="h-full w-full flex items-center justify-center">
-      <span className="text-lg ">Currently, no pets</span>
+      <span className="text-lg mb-[100px]">No pets</span>
     </div>
   );
 }
