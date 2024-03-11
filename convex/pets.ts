@@ -44,6 +44,39 @@ export const removePet = mutation({
     id: v.id("pets"),
   },
   handler: async (ctx, args) => {
-    await ctx.db.delete(args.id)
+    const pet = await ctx.db.get(args.id);
+    if (pet?.imageStorageId) await ctx.storage.delete(pet.imageStorageId);
+    await ctx.db.delete(args.id);
   },
-})
+});
+
+export const addImage = mutation({
+  args: {
+    pet: v.id("pets"),
+    imageId: v.id("_storage"),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.pet, {
+      imageStorageId: args.imageId,
+      imageUrl: await ctx.storage.getUrl(args.imageId),
+    });
+  },
+});
+
+export const editPet = mutation({
+  args: {
+    id: v.id("pets"),
+    notes: v.string(),
+    owner: v.string(),
+    age: v.number(),
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.id,{
+      name: args.name,
+      age: args.age,
+      owner: args.owner,
+      notes: args.notes,
+    })
+  }
+});
