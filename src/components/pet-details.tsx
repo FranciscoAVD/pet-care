@@ -20,6 +20,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { useState } from "react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
 
 export default function PetDetails({ pet }: { pet: TPet | null }) {
   return (
@@ -53,8 +54,7 @@ function NoPet() {
 }
 
 function TopBar({ pet }: { pet: TPet }) {
-  const remove = useMutation(api.pets.removePet);
-  const activePet = usePetStore((state) => state.activePet);
+  
   const url = pet.imageUrl ? pet.imageUrl : placeholderUrl;
   return (
     <section className="space-y-4 sm:space-y-0 sm:flex sm:items-center sm:justify-between px-8 py-5 bg-white border-b border-black/10">
@@ -78,17 +78,8 @@ function TopBar({ pet }: { pet: TPet }) {
       </div>
       <div className="space-x-2 text-center">
         <EditPet pet={pet} />
-        <Button
-          variant="secondary"
-          className="hover:text-accent"
-          onClick={() => {
-            //activePet will always be of type Id<"pets"> when button is visible
-            //@ts-ignore
-            remove({ id: activePet });
-          }}
-        >
-          Checkout
-        </Button>
+        
+        <CheckoutPet name={pet.name}/>
       </div>
     </section>
   );
@@ -126,7 +117,7 @@ function EditPet({ pet }: { pet: TPet }) {
   const [owner, setOwner] = useState(pet.owner);
   const [name, setName] = useState(pet.name);
   const [age, setAge] = useState(pet.age);
-  const [notes, setNotes] = useState(pet.notes?pet.notes:"");
+  const [notes, setNotes] = useState(pet.notes ? pet.notes : "");
   const edit = useMutation(api.pets.editPet);
   return (
     <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
@@ -141,17 +132,20 @@ function EditPet({ pet }: { pet: TPet }) {
             done to persist the changes.
           </DialogDescription>
         </DialogHeader>
-        <form className="grid gap-4 py-4" onSubmit={(e)=>{
-          e.preventDefault();
-          edit({
-            id: pet._id,
-            name: name,
-            age: age,
-            notes: notes,
-            owner: owner
-          })
-          setIsFormOpen(false);
-        }}>
+        <form
+          className="grid gap-4 py-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            edit({
+              id: pet._id,
+              name: name,
+              age: age,
+              notes: notes,
+              owner: owner,
+            });
+            setIsFormOpen(false);
+          }}
+        >
           <div className="flex flex-col gap-4">
             <Label htmlFor="edit-name">Guest name</Label>
             <Input
@@ -205,5 +199,33 @@ function EditPet({ pet }: { pet: TPet }) {
         </form>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function CheckoutPet({name}: { name: string }) {
+  const remove = useMutation(api.pets.removePet);
+  const activePet = usePetStore((state) => state.activePet);
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="secondary">Checkout</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Checkout {name}?</AlertDialogTitle>
+          <AlertDialogDescription className="text-left">
+            This action cannot be undone. This will remove {name} from your dashboard.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={() => {
+            //activePet will always be of type Id<"pets"> when button is visible
+            //@ts-ignore
+            remove({ id: activePet });
+          }}>Checkout</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
