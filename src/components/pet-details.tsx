@@ -20,7 +20,17 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { useState } from "react";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
 
 export default function PetDetails({ pet }: { pet: TPet | null }) {
   return (
@@ -54,7 +64,6 @@ function NoPet() {
 }
 
 function TopBar({ pet }: { pet: TPet }) {
-  
   const url = pet.imageUrl ? pet.imageUrl : placeholderUrl;
   return (
     <section className="space-y-4 sm:space-y-0 sm:flex sm:items-center sm:justify-between px-8 py-5 bg-white border-b border-black/10">
@@ -78,8 +87,8 @@ function TopBar({ pet }: { pet: TPet }) {
       </div>
       <div className="space-x-2 text-center">
         <EditPet pet={pet} />
-        
-        <CheckoutPet name={pet.name}/>
+
+        <CheckoutPet name={pet.name} />
       </div>
     </section>
   );
@@ -128,8 +137,8 @@ function EditPet({ pet }: { pet: TPet }) {
         <DialogHeader>
           <DialogTitle>Edit Guest Details</DialogTitle>
           <DialogDescription>
-            Edit your guest&apos;s details. Edit any field and click save when you&apos;re
-            done to persist the changes.
+            Edit your guest&apos;s details. Edit any field and click save when
+            you&apos;re done to persist the changes.
           </DialogDescription>
         </DialogHeader>
         <form
@@ -171,13 +180,14 @@ function EditPet({ pet }: { pet: TPet }) {
             </Label>
             <Input
               id="edit-age"
-              value={age ? age : 0}
+              value={age || NaN}
               onChange={(e) => {
-                if (e.target.valueAsNumber) {
-                  if (e.target.valueAsNumber < 0 || e.target.valueAsNumber > 32)
-                    return;
-                  setAge(e.target.valueAsNumber);
-                } else setAge(0);
+                const inputValue = parseInt(e.target.value, 10);
+                if (!isNaN(inputValue) && inputValue >= 0 && inputValue <= 32) {
+                  setAge(inputValue);
+                } else {
+                  setAge(NaN); 
+                }
               }}
               inputMode="numeric"
             />
@@ -202,7 +212,7 @@ function EditPet({ pet }: { pet: TPet }) {
   );
 }
 
-function CheckoutPet({name}: { name: string }) {
+function CheckoutPet({ name }: { name: string }) {
   const remove = useMutation(api.pets.removePet);
   const activePet = usePetStore((state) => state.activePet);
   return (
@@ -214,16 +224,21 @@ function CheckoutPet({name}: { name: string }) {
         <AlertDialogHeader>
           <AlertDialogTitle>Checkout {name}?</AlertDialogTitle>
           <AlertDialogDescription className="text-left">
-            This action cannot be undone. This will remove {name} from your dashboard.
+            This action cannot be undone. This will remove {name} from your
+            dashboard.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => {
-            //activePet will always be of type Id<"pets"> when button is visible
-            //@ts-ignore
-            remove({ id: activePet });
-          }}>Checkout</AlertDialogAction>
+          <AlertDialogAction
+            onClick={() => {
+              //activePet will always be of type Id<"pets"> when button is visible
+              //@ts-ignore
+              remove({ id: activePet });
+            }}
+          >
+            Checkout
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

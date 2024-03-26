@@ -20,7 +20,13 @@ import { useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 
-export default function AddPetButton({ className, id }: { className?: string, id: Id<"users">|null }) {
+export default function AddPetButton({
+  className,
+  id,
+}: {
+  className?: string;
+  id: Id<"users"> | null;
+}) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [owner, setOwner] = useState("");
   const [name, setName] = useState("");
@@ -29,7 +35,7 @@ export default function AddPetButton({ className, id }: { className?: string, id
   const add = useMutation(api.pets.addPet);
 
   const handleSubmit = async () => {
-    if(!id) return;
+    if (!id) return;
     const pet = {
       name: name,
       owner: owner,
@@ -72,12 +78,15 @@ export default function AddPetButton({ className, id }: { className?: string, id
             when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
-        <form className="grid gap-4 py-4" onSubmit={(e) => {
-              e.preventDefault();
-              handleSubmit();
-              resetInputs();
-              setIsFormOpen(false);
-            }}>
+        <form
+          className="grid gap-4 py-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+            resetInputs();
+            setIsFormOpen(false);
+          }}
+        >
           <div className="flex flex-col gap-4">
             <Label htmlFor="name">Guest name</Label>
             <Input
@@ -106,13 +115,14 @@ export default function AddPetButton({ className, id }: { className?: string, id
               type="number"
               min="1"
               max="32"
-              value={age ? age : 0}
+              value={age || NaN}
               onChange={(e) => {
-                if (e.target.valueAsNumber) {
-                  if (e.target.valueAsNumber < 0 || e.target.valueAsNumber > 32)
-                    return;
-                  setAge(e.target.valueAsNumber);
-                } else setAge(0);
+                const inputValue = parseInt(e.target.value, 10);
+                if (!isNaN(inputValue) && inputValue >= 0 && inputValue <= 32) {
+                  setAge(inputValue);
+                } else {
+                  setAge(NaN);
+                }
               }}
               inputMode="numeric"
             />
@@ -127,17 +137,10 @@ export default function AddPetButton({ className, id }: { className?: string, id
               onChange={(e) => setNotes(e.target.value)}
             />
           </div>
-          <Button
-            type="submit"
-            className="w-fit ml-auto"
-            disabled={disabled()}
-          >
+          <Button type="submit" className="w-fit ml-auto" disabled={disabled()}>
             Add
           </Button>
         </form>
-        
-          
-        
       </DialogContent>
     </Dialog>
   );
