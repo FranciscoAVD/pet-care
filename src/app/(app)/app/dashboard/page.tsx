@@ -20,23 +20,23 @@ export default function Dashboard() {
   const pet = getPet(pets, active);
   const filtered = useSearchStore((state) => state.filterSearch);
   const search = useSearchStore((state) => state.search);
-  
+
   return (
     <main>
       <div className="flex justify-between sm:items-center py-8">
         <Branding />
-        <Stats guests={pets?.length}/>
+        <Stats guests={pets?.length} />
       </div>
       <div className="grid md:grid-cols-3 grid-rows-[45px_300px_500px] md:grid-rows-[45px_1fr] md:h-[600px] gap-4">
         <div className="md:row-start-1 md:row-span-1 md:col-start-1 md:col-span-1">
           <SearchForm />
         </div>
         <ContentBlock className="relative md:row-start-2 md:row-span-full md:col-start-1 md:col-span-1">
-          <PetList pets={filtered(pets, search)}/>
-          <AddPetButton className="absolute right-4 bottom-4 z-10" id={id}/>
+          <PetList pets={filtered(pets, search)} />
+          <AddPetButton className="absolute right-4 bottom-4 z-10" id={id} />
         </ContentBlock>
         <ContentBlock className="md:row-start-1 md:row-span-full md:col-start-2 md:col-span-full">
-          <PetDetails pet={pet}/>
+          <PetDetails pet={pet} />
         </ContentBlock>
       </div>
     </main>

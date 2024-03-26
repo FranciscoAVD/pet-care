@@ -13,7 +13,7 @@ export default function Account() {
         <H1 className="my-8">Your Account</H1>
         <div className="flex gap-x-2 items-center">
           <span className="sr-only">User settings</span>
-          <UserButton />
+          <UserButton afterSignOutUrl="/"/>
         </div>
       </div>
 
