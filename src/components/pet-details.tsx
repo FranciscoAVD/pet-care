@@ -128,7 +128,7 @@ function EditPet({ pet }: { pet: TPet }) {
         <DialogHeader>
           <DialogTitle>Edit Guest Details</DialogTitle>
           <DialogDescription>
-            Edit your guest's details. Edit any field and click save when you're
+            Edit your guest&apos;s details. Edit any field and click save when you're
             done to persist the changes.
           </DialogDescription>
         </DialogHeader>
