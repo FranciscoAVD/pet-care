@@ -69,7 +69,7 @@ export default function AddPetButton({ className, id }: { className?: string, id
           <DialogDescription>
             Add new Guests to your dashboard. Be sure to fill out all fields not
             labeled as <span className="font-bold">optional</span>. Click add
-            when you're done.
+            when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <form className="grid gap-4 py-4" onSubmit={(e) => {
