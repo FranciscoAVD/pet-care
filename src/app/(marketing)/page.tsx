@@ -17,7 +17,7 @@ export default function Home() {
         alt="Screenshot of PetCare dashboard"
         priority
       />
-      <div className=" text-center ">
+      <div className=" text-center md:text-left">
         <Logo />
         <h1 className="text-5xl text-gray-100 mb-6 mt-4 max-w-[500px]">
           Manage your{" "}
